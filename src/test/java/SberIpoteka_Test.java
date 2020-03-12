@@ -49,6 +49,7 @@ public class SberIpoteka_Test
         WebElement linkToMortgageElement = selectorDriver.findElement(By.xpath(linkToMortgageXPath));
         hover = bobDoSomething.moveToElement(linkToMortgageElement);
         hover.perform();
+        waitForLoad.until(ExpectedConditions.visibilityOf(linkToMortgageElement));
         clickOn(linkToMortgageElement);
 
         String mortgageSettingsAreaXPath = "//div[contains(@data-pid, 'Iframe')]/parent::div";
@@ -61,21 +62,19 @@ public class SberIpoteka_Test
         selectorDriver.switchTo().frame(0);
 
         String estateCostXPath = "//input[@id='estateCost']";
+
         waitForLoad.until(ExpectedConditions.visibilityOf(selectorDriver.findElement(By.xpath(estateCostXPath))));
         waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath(estateCostXPath)));
         WebElement estateCostElement = selectorDriver.findElement(By.xpath(estateCostXPath));
         waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath(estateCostXPath)));
         clickOn(estateCostElement);
         while(!estateCostElement.getAttribute("value").isEmpty()) estateCostElement.clear();
-        //estateCostElement.sendKeys(Keys.CONTROL + "a");
-        //estateCostElement.sendKeys(Keys.DELETE);
         estateCostElement.sendKeys("5180000");
-        while(!checkSendKeys(estateCostXPath, "5 180 000 ₽"))
-        {
-            Thread.sleep(50);
-        }
+        waitForLoad.until(new textApproved("5 180 000 ₽", estateCostXPath));
+        String currentPercent = selectorDriver.findElement(By.xpath("//span[@class='dcCalc_input-row-tablet__inputPercents']")).getText();
 
         String feeXPath = "//input[@id='initialFee']";
+        //waitForLoad.until(new fieldChanged(feeXPath, currentPercent));
         waitForLoad.until(ExpectedConditions.visibilityOf(selectorDriver.findElement(By.xpath(feeXPath))));
         waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath(feeXPath)));
         WebElement feeElement = selectorDriver.findElement(By.xpath(feeXPath));
@@ -83,10 +82,7 @@ public class SberIpoteka_Test
         clickOn(feeElement);
         while(!feeElement.getAttribute("value").isEmpty()) feeElement.clear();
         feeElement.sendKeys("3058000");
-        while(!checkSendKeys(feeXPath, "3 058 000 ₽"))
-        {
-            Thread.sleep(50);
-        }
+        waitForLoad.until(new textApproved("3 058 000 ₽", feeXPath));
 
         String termXPath = "//input[@id='creditTerm']";
         waitForLoad.until(ExpectedConditions.visibilityOf(selectorDriver.findElement(By.xpath(termXPath))));
@@ -97,19 +93,16 @@ public class SberIpoteka_Test
         termElement.sendKeys(Keys.CONTROL + "a");
         termElement.sendKeys(Keys.DELETE);
         termElement.sendKeys("30");
-        while(!checkSendKeys(termXPath, "30 лет"))
-        {
-            Thread.sleep(50);
-        }
+        waitForLoad.until(new textApproved("30 лет", termXPath));
 
-        controlCheck(estateCostXPath, "5 180 000 ₽");
-        controlCheck(feeXPath, "3 058 000 ₽");
-        controlCheck(termXPath, "30 лет");
+        waitForLoad.until(new textApproved("5 180 000 ₽", estateCostXPath));
+        waitForLoad.until(new textApproved("3 058 000 ₽", feeXPath));
+        waitForLoad.until(new textApproved("30 лет", termXPath));
 
         String sberCardXPath = "//input[@data-test-id='paidToCard']/parent::label";
         waitForLoad.until(ExpectedConditions.visibilityOf(selectorDriver.findElement(By.xpath(sberCardXPath))));
         WebElement sberCardElement = selectorDriver.findElement(By.xpath(sberCardXPath));
-        switchSwitch(sberCardElement);
+        clickOn(sberCardElement);
 
         String checkIncomeSwitchXPath = "//div[contains(text(),'возможность подтвердить доход')]/parent::div/parent::div";
         waitForLoad.until(ExpectedConditions.presenceOfElementLocated(By.xpath(checkIncomeSwitchXPath)));
@@ -126,9 +119,9 @@ public class SberIpoteka_Test
         waitForLoad.until(ExpectedConditions.elementToBeClickable(youngFamilySwitchElement));
         clickOn(youngFamilySwitchElement);
 
-        controlCheck(estateCostXPath, "5 180 000 ₽");
-        controlCheck(feeXPath, "3 058 000 ₽");
-        controlCheck(termXPath, "30 лет");
+        waitForLoad.until(new textApproved("5 180 000 ₽", estateCostXPath));
+        waitForLoad.until(new textApproved("3 058 000 ₽", feeXPath));
+        waitForLoad.until(new textApproved("30 лет", termXPath));
 
         checkData();
 
@@ -141,49 +134,6 @@ public class SberIpoteka_Test
         checkData();
 
         testIfTrueData();
-    }
-
-    private void switchSwitch(WebElement me)
-    {
-        me.click();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void controlCheck(String XPath, String s)
-    {
-        if(!selectorDriver.findElement(By.xpath(XPath)).getAttribute("value").equals(s))
-        {
-            WebElement tmpElem = selectorDriver.findElement(By.xpath(XPath));
-            tmpElem.sendKeys(Keys.CONTROL + "a");
-            tmpElem.sendKeys(Keys.DELETE);
-            tmpElem.sendKeys(s);
-            try
-            {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-            controlCheck(XPath, s);
-        }
-        return;
-    }
-
-    private boolean checkSendKeys(String estateCostElement, String s) throws InterruptedException
-    {
-        if(!selectorDriver.findElement(By.xpath(estateCostElement)).getAttribute("value").equals(s))
-        {
-            //System.out.println(selectorDriver.findElement(By.xpath(estateCostElement)).getAttribute("value"));
-            //Thread.sleep(50);
-            //checkSendKeys(estateCostElement, s);
-            return false;
-        }
-        return true;
     }
 
     private void checkData()
