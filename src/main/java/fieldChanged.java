@@ -4,19 +4,19 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class fieldChanged implements ExpectedCondition<Boolean>
 {
-    String percent;
+    String text;
     String xPath;
 
-    public fieldChanged(String xPath, String currentPercent)
+    public fieldChanged(String xPath, String prevText)
     {
         this.xPath = xPath;
-        percent = currentPercent;
+        text = prevText;
     }
 
     @Override
     public Boolean apply(WebDriver driver)
     {
-        Boolean didPercentChange = driver.findElement(By.xpath(xPath)).getText().equals(percent);
+        Boolean didPercentChange = driver.findElement(By.xpath(xPath)).getText().equals(text);
         return !didPercentChange;
     }
 }

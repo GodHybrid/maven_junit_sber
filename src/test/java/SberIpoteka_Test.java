@@ -125,7 +125,9 @@ public class SberIpoteka_Test
 
         checkData();
 
-        justwait();
+//        waitForLoad.until(new fieldChanged("//span[@data-test-id='monthlyPayment']", monthlyPay));
+//        waitForLoad.until(new fieldChanged("//span[@data-test-id='requiredIncome']", necInc));
+//        waitForLoad.until(new fieldChanged("//span[@data-test-id='rate']", percent));
 
         clickOn(incomeSwitchElement);
 
