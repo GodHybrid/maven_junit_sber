@@ -34,7 +34,8 @@ public class SberIpoteka_Test
     }
 
     @Test
-    public void execute() throws InterruptedException {
+    public void execute() throws InterruptedException
+    {
         String mainMenuXPath = "//span[@class='lg-menu__text' and contains(text(), 'Ипотека')]";
         String subMenuAreaXPath = "//div[@id='submenu-1']";
         WebElement mainMenuElement = selectorDriver.findElement(By.xpath(mainMenuXPath));
@@ -74,7 +75,6 @@ public class SberIpoteka_Test
         String currentPercent = selectorDriver.findElement(By.xpath("//span[@class='dcCalc_input-row-tablet__inputPercents']")).getText();
 
         String feeXPath = "//input[@id='initialFee']";
-        //waitForLoad.until(new fieldChanged(feeXPath, currentPercent));
         waitForLoad.until(ExpectedConditions.visibilityOf(selectorDriver.findElement(By.xpath(feeXPath))));
         waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath(feeXPath)));
         WebElement feeElement = selectorDriver.findElement(By.xpath(feeXPath));
@@ -125,10 +125,6 @@ public class SberIpoteka_Test
 
         checkData();
 
-//        waitForLoad.until(new fieldChanged("//span[@data-test-id='monthlyPayment']", monthlyPay));
-//        waitForLoad.until(new fieldChanged("//span[@data-test-id='requiredIncome']", necInc));
-//        waitForLoad.until(new fieldChanged("//span[@data-test-id='rate']", percent));
-
         clickOn(incomeSwitchElement);
 
         justwait();
@@ -152,8 +148,8 @@ public class SberIpoteka_Test
         Assert.assertEquals("2 122 000 ₽", creditSum);
         Assert.assertEquals("17 535 ₽", monthlyPay);
         Assert.assertEquals("29 224 ₽", necInc);
+        //Здесь должно упасть, по заданию
         Assert.assertEquals("9,4 %", percent);
-
     }
 
     private void justwait() throws InterruptedException

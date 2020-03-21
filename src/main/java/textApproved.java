@@ -7,7 +7,6 @@ public class textApproved implements ExpectedCondition<Boolean>
 {
     String expectedText;
     String xPath;
-    Integer count = 0;
 
     public textApproved(String expectedText, String xPath)
     {
